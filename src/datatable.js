@@ -109,8 +109,14 @@ class DataTable {
     prepareDom() {
         this.wrapper.innerHTML = `
             <div class="datatable" dir="${this.options.direction}">
-                <div class="dt-header"></div>
-                <div class="dt-scrollable"></div>
+                <div class="datatable-main">
+                    <div class="dt-header"></div>
+                    <div class="dt-scrollable"></div>
+                </div>
+                <div class="datatable-left">
+                    <div class="dt-header"></div>
+                    <div class="dt-scrollable"></div>
+                </div>
                 <div class="dt-footer"></div>
                 <div class="dt-freeze">
                     <span class="dt-freeze__message">
@@ -124,13 +130,14 @@ class DataTable {
         `;
 
         this.datatableWrapper = $('.datatable', this.wrapper);
-        this.header = $('.dt-header', this.wrapper);
-        this.footer = $('.dt-footer', this.wrapper);
-        this.bodyScrollable = $('.dt-scrollable', this.wrapper);
-        this.freezeContainer = $('.dt-freeze', this.wrapper);
-        this.toastMessage = $('.dt-toast', this.wrapper);
-        this.pasteTarget = $('.dt-paste-target', this.wrapper);
-        this.dropdownContainer = $('.dt-dropdown-container', this.wrapper);
+        this.datatableWrapperLeft = $('.datatable-left', this.datatableWrapper);
+        this.header = $('.dt-header', this.datatableWrapper);
+        this.footer = $('.dt-footer', this.datatableWrapper);
+        this.bodyScrollable = $('.dt-scrollable', this.datatableWrapper);
+        this.freezeContainer = $('.dt-freeze', this.datatableWrapper);
+        this.toastMessage = $('.dt-toast', this.datatableWrapper);
+        this.pasteTarget = $('.dt-paste-target', this.datatableWrapper);
+        this.dropdownContainer = $('.dt-dropdown-container', this.datatableWrapper);
     }
 
     refresh(data, columns) {

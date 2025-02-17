@@ -10,6 +10,7 @@ export default class BodyRenderer {
         this.bodyScrollable = instance.bodyScrollable;
         this.footer = this.instance.footer;
         this.log = instance.log;
+        this.datatableWrapperLeft = instance.datatableWrapperLeft;
     }
 
     renderRows(rows) {
@@ -66,6 +67,11 @@ export default class BodyRenderer {
         this.renderRows(rows);
         // setDimensions requires atleast 1 row to exist in dom
         this.instance.setDimensions();
+        this.renderLeftColumns();
+    }
+
+    renderLeftColumns() {
+        this.datatableWrapperLeft.querySelector('.dt-scrollable').innerHTML = this.getLeftBodyHTML();
     }
 
     renderFooter() {
@@ -137,6 +143,26 @@ export default class BodyRenderer {
 
     clearToastMessage() {
         this.instance.toastMessage.innerHTML = '';
+    }
+
+    getLeftBodyHTML(rows) {
+        if (!rows) rows = this.datamanager.getRowsForView();
+
+        const columns = this.datamanager.getColumns();
+        const leftColumns = columns.filter(col => {
+            return (col.id === '_checkbox' || col.id === '_rowIndex' || col.fixed);
+        }).map(col => col.colIndex);
+
+        return `
+            <table class="dt-body">
+                <tbody>
+                    ${rows.map(row => {
+        const leftRow = row.filter(cell => leftColumns.includes(cell.colIndex));
+        return this.rowmanager.getRowHTML(leftRow, row.meta);
+    }).join('')}
+                </tbody>
+            </table>
+        `;
     }
 
     getNoDataHTML() {

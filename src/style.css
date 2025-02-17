@@ -29,6 +29,18 @@
     overflow: hidden;
 }
 
+.datatable-main {
+	overflow: auto;
+}
+
+.datatable-left {
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 1;
+	background-color: white;
+}
+
 .dt-scrollable {
     height: 40vw;
     overflow: auto;
@@ -290,3 +302,7 @@
 body.dt-resize {
     cursor: col-resize;
 }
+
+/* .datatable-left [data-is-filter] {
+	display: none;
+} */

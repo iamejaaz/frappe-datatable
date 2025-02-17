@@ -19,7 +19,8 @@ export default class ColumnManager {
             'wrapper',
             'rowmanager',
             'bodyScrollable',
-            'bodyRenderer'
+            'bodyRenderer',
+            'datatableWrapperLeft'
         ]);
 
         this.bindEvents();
@@ -28,12 +29,18 @@ export default class ColumnManager {
     renderHeader() {
         this.header.innerHTML = '<div></div>';
         this.refreshHeader();
+        this.refreshHeaderLeft();
     }
 
     refreshHeader() {
         const columns = this.datamanager.getColumns();
 
         // refresh html
+
+        this.header.innerHTML = `
+            <thead>${this.getHeaderHTML(columns)}</thead>
+        `;
+
         $('div', this.header).innerHTML = this.getHeaderHTML(columns);
 
         this.$filterRow = $('.dt-row-filter', this.header);
@@ -43,6 +50,16 @@ export default class ColumnManager {
         // reset columnMap
         this.$columnMap = [];
         this.bindMoveColumn();
+    }
+
+    refreshHeaderLeft() {
+        let columns = this.datamanager.getColumns();
+
+        const leftColumns = columns.filter(col => {
+            return (col.id === '_checkbox' || col.id === '_rowIndex' || col.fixed);
+        });
+
+        $('.dt-header', this.datatableWrapperLeft).innerHTML = this.getHeaderHTML(leftColumns);
     }
 
     getHeaderHTML(columns) {
@@ -412,6 +429,12 @@ export default class ColumnManager {
         }
 
         $column.style.width = width + 'px';
+
+        // fixed left column
+        const $leftColumn = $(selector, this.datatableWrapperLeft);
+        if ($leftColumn) {
+            $leftColumn.style.width = width + 'px';
+        }
     }
 
     getColumnMinWidth(colIndex) {

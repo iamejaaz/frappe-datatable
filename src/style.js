@@ -12,14 +12,15 @@ export default class Style {
         linkProperties(this, this.instance, [
             'options', 'datamanager', 'columnmanager',
             'header', 'footer', 'bodyScrollable', 'datatableWrapper',
-            'getColumn', 'bodyRenderer'
+            'getColumn', 'bodyRenderer', 'datatableWrapperLeft'
         ]);
 
         this.scopeClass = 'dt-instance-' + instance.constructor.instances;
         instance.datatableWrapper.classList.add(this.scopeClass);
 
         const styleEl = document.createElement('style');
-        instance.wrapper.insertBefore(styleEl, instance.datatableWrapper);
+        // instance.wrapper.insertBefore(styleEl, instance.datatableWrapper);
+        document.head.appendChild(styleEl);
         this.styleEl = styleEl;
 
         this.bindResizeWindow();
@@ -148,6 +149,8 @@ export default class Style {
         this.distributeRemainingWidth();
         this.setColumnStyle();
         this.setBodyStyle();
+
+        this.setDatatableLeftStyle();
     }
 
     setCellHeight() {
@@ -357,6 +360,22 @@ export default class Style {
                 overflowX: 'hidden'
             });
         }
+    }
+
+    setDatatableLeftStyle() {
+        const wrapperWidth = $.style(this.datatableWrapperLeft, 'width');
+        $.style(this.datatableWrapperLeft, {
+            width: wrapperWidth + 'px',
+            overflow: 'hidden'
+        });
+
+        const scrollable = $('.dt-scrollable', this.datatableWrapperLeft);
+
+        const width = $.style(scrollable, 'width');
+        $.style(scrollable, {
+            width: (width + 20) + 'px',
+            paddingRight: '20px'
+        });
     }
 
     getColumnHeaderElement(colIndex) {
